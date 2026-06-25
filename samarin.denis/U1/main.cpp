@@ -27,6 +27,22 @@ int main(int argc, char ** argv)
   samarin::detail::list_t< samarin::Person > records{ nullptr, nullptr };
   const samarin::counts_t counts = samarin::readRecords(input, records);
   static_cast< void >(counts);
+  if (options.hasInput) {
+    inputFile.close();
+  }
+
+  std::ofstream outputFile;
+  if (options.hasOutput) {
+    outputFile.open(options.outputName);
+    if (!outputFile.is_open()) {
+      samarin::detail::clear(records);
+      std::cerr << "cannot open output file\n";
+      return 2;
+    }
+  }
+  std::ostream & output = options.hasOutput ? outputFile : std::cout;
+
+  samarin::writeRecords(output, records);
 
   samarin::detail::clear(records);
   return 0;

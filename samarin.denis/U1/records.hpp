@@ -14,6 +14,7 @@ namespace samarin {
   };
 
   counts_t readRecords(std::istream & input, detail::list_t< Person > & records);
+  void writeRecords(std::ostream & output, const detail::list_t< Person > & records);
 }
 
 #endif

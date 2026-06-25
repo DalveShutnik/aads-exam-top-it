@@ -3,6 +3,7 @@
 #include <cctype>
 #include <cstddef>
 #include <istream>
+#include <ostream>
 #include <string>
 
 namespace {
@@ -58,4 +59,12 @@ samarin::counts_t samarin::readRecords(std::istream & input, detail::list_t< Per
     }
   }
   return counts;
+}
+
+void samarin::writeRecords(std::ostream & output, const detail::list_t< Person > & records)
+{
+  using Node = const detail::list_node_t< Person >;
+  for (Node * node = records.head; node != nullptr; node = node->next) {
+    output << node->value.id << ' ' << node->value.info << '\n';
+  }
 }
