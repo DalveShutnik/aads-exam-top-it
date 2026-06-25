@@ -12,8 +12,7 @@ namespace {
   const int exitRuntimeError = 2;
 
   int writeResult(const samarin::options_t & options,
-      const samarin::detail::list_t< samarin::Person > & records,
-      const samarin::counts_t & counts)
+      const samarin::detail::list_t< samarin::Person > & records)
   {
     std::ofstream outputFile;
     if (options.hasOutput) {
@@ -25,7 +24,6 @@ namespace {
     }
     std::ostream & output = options.hasOutput ? outputFile : std::cout;
     samarin::writeRecords(output, records);
-    std::cerr << counts.accepted << ' ' << counts.ignored << '\n';
     if (!output) {
       std::cerr << "cannot write output\n";
       return exitRuntimeError;
@@ -59,7 +57,8 @@ int main(int argc, char ** argv)
     if (options.hasInput) {
       inputFile.close();
     }
-    code = writeResult(options, records, counts);
+    std::cerr << counts.accepted << ' ' << counts.ignored << '\n';
+    code = writeResult(options, records);
   } catch (const std::exception & error) {
     std::cerr << error.what() << '\n';
     code = exitRuntimeError;
