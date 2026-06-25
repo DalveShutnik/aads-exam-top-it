@@ -11,7 +11,7 @@ namespace {
   const int exitInvalidArguments = 1;
   const int exitRuntimeError = 2;
 
-  int writeResult(const samarin::options_t & options,
+  int writeResult(const samarin::Options & options,
       const samarin::detail::list_t< samarin::Person > & records)
   {
     std::ofstream outputFile;
@@ -34,7 +34,7 @@ namespace {
 
 int main(int argc, char ** argv)
 {
-  samarin::options_t options{ false, "", false, "" };
+  samarin::Options options{ false, "", false, "" };
   if (!samarin::parseArguments(argc, argv, options)) {
     std::cerr << "invalid arguments\n";
     return exitInvalidArguments;

@@ -2,14 +2,9 @@
 
 #include <string>
 
-namespace {
-  bool hasPrefix(const std::string & text, const std::string & prefix)
-  {
-    return text.size() >= prefix.size() && text.compare(0, prefix.size(), prefix) == 0;
-  }
-}
+#include "cli.hpp"
 
-bool samarin::parseArguments(int argc, const char * const * argv, options_t & options)
+bool samarin::parseArguments(int argc, const char * const * argv, Options & options)
 {
   const std::string inputPrefix = "in:";
   const std::string outputPrefix = "out:";
@@ -19,20 +14,15 @@ bool samarin::parseArguments(int argc, const char * const * argv, options_t & op
   }
   for (int i = 1; i < argc; ++i) {
     const std::string argument = argv[i];
-    if (hasPrefix(argument, inputPrefix)) {
-      const std::string name = argument.substr(inputPrefix.size());
-      if (options.hasInput || name.empty()) {
+    std::string value;
+    if (detail::takeOption(argument, inputPrefix, value)) {
+      if (!detail::assignOnce(options.hasInput, options.inputName, value)) {
         return false;
       }
-      options.hasInput = true;
-      options.inputName = name;
-    } else if (hasPrefix(argument, outputPrefix)) {
-      const std::string name = argument.substr(outputPrefix.size());
-      if (options.hasOutput || name.empty()) {
+    } else if (detail::takeOption(argument, outputPrefix, value)) {
+      if (!detail::assignOnce(options.hasOutput, options.outputName, value)) {
         return false;
       }
-      options.hasOutput = true;
-      options.outputName = name;
     } else {
       return false;
     }
