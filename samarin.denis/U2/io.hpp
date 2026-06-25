@@ -6,9 +6,7 @@
 #include "model.hpp"
 
 namespace samarin {
-  void readPersons(std::istream & input, Dataset & data);
   bool readMeetings(std::istream & input, Dataset & data);
-  void writePersons(std::ostream & output, const Dataset & data);
 }
 
 #endif

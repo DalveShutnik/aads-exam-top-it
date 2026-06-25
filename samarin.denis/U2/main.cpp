@@ -6,6 +6,7 @@
 #include "commands.hpp"
 #include "io.hpp"
 #include "model.hpp"
+#include "person_io.hpp"
 
 namespace {
   const int exitInvalidArguments = 1;
