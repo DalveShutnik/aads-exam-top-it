@@ -6,7 +6,7 @@
 #include "model.hpp"
 
 namespace samarin {
-  void runCommands(std::istream & input, std::ostream & output, dataset_t & data);
+  void runCommands(std::istream & input, std::ostream & output, Dataset & data);
 }
 
 #endif

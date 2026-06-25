@@ -8,7 +8,7 @@
 #include <utility>
 
 namespace {
-  using PersonNode = samarin::detail::list_node_t< samarin::person_t >;
+  using PersonNode = samarin::detail::list_node_t< samarin::Person >;
 
   bool isSpaceChar(char symbol)
   {
@@ -69,7 +69,7 @@ namespace {
   }
 }
 
-void samarin::readPersons(std::istream & input, dataset_t & data)
+void samarin::readPersons(std::istream & input, Dataset & data)
 {
   std::string line;
   while (std::getline(input, line)) {
@@ -81,7 +81,7 @@ void samarin::readPersons(std::istream & input, dataset_t & data)
   }
 }
 
-bool samarin::readMeetings(std::istream & input, dataset_t & data)
+bool samarin::readMeetings(std::istream & input, Dataset & data)
 {
   while (true) {
     std::size_t first = 0;
@@ -98,7 +98,7 @@ bool samarin::readMeetings(std::istream & input, dataset_t & data)
   return input.eof();
 }
 
-void samarin::writePersons(std::ostream & output, const dataset_t & data)
+void samarin::writePersons(std::ostream & output, const Dataset & data)
 {
   for (const PersonNode * node = data.persons.head; node != nullptr; node = node->next) {
     if (node->value.named) {

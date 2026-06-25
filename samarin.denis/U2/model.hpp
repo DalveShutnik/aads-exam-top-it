@@ -7,27 +7,27 @@
 #include "list.hpp"
 
 namespace samarin {
-  struct person_t {
+  struct Person {
     std::size_t id;
     bool named;
     std::string description;
   };
 
-  struct meeting_t {
+  struct Meeting {
     std::size_t first;
     std::size_t second;
     std::size_t duration;
   };
 
-  struct dataset_t {
-    detail::list_t< person_t > persons;
-    detail::list_t< meeting_t > meetings;
+  struct Dataset {
+    detail::list_t< Person > persons;
+    detail::list_t< Meeting > meetings;
   };
 
-  bool insertPerson(dataset_t & data, std::size_t id, bool named, const std::string & description);
-  person_t * findPerson(dataset_t & data, std::size_t id);
-  void addMeeting(dataset_t & data, std::size_t first, std::size_t second, std::size_t duration);
-  void clearDataset(dataset_t & data);
+  bool insertPerson(Dataset & data, std::size_t id, bool named, const std::string & description);
+  Person * findPerson(Dataset & data, std::size_t id);
+  void addMeeting(Dataset & data, std::size_t first, std::size_t second, std::size_t duration);
+  void clearDataset(Dataset & data);
 }
 
 #endif

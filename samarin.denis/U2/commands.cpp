@@ -9,8 +9,8 @@
 #include <utility>
 
 namespace {
-  using PersonNode = samarin::detail::list_node_t< samarin::person_t >;
-  using MeetingNode = samarin::detail::list_node_t< samarin::meeting_t >;
+  using PersonNode = samarin::detail::list_node_t< samarin::Person >;
+  using MeetingNode = samarin::detail::list_node_t< samarin::Meeting >;
   using DurationPair = std::pair< std::size_t, std::size_t >;
   using PairNode = samarin::detail::list_node_t< DurationPair >;
 
@@ -103,12 +103,12 @@ namespace {
     }
   }
 
-  void printMeetings(std::ostream & out, const samarin::dataset_t & data, std::size_t id,
+  void printMeetings(std::ostream & out, const samarin::Dataset & data, std::size_t id,
       Bound bound, std::size_t threshold)
   {
     samarin::detail::list_t< DurationPair > selected{ nullptr, nullptr };
     for (const MeetingNode * node = data.meetings.head; node != nullptr; node = node->next) {
-      const samarin::meeting_t & meeting = node->value;
+      const samarin::Meeting & meeting = node->value;
       std::size_t partner = 0;
       if (meeting.first == id) {
         partner = meeting.second;
@@ -130,7 +130,7 @@ namespace {
     samarin::detail::clear(selected);
   }
 
-  void doAnons(std::ostream & out, const samarin::dataset_t & data)
+  void doAnons(std::ostream & out, const samarin::Dataset & data)
   {
     for (const PersonNode * node = data.persons.head; node != nullptr; node = node->next) {
       if (!node->value.named) {
@@ -139,9 +139,9 @@ namespace {
     }
   }
 
-  void doDesc(std::ostream & out, samarin::dataset_t & data, std::size_t id)
+  void doDesc(std::ostream & out, samarin::Dataset & data, std::size_t id)
   {
-    const samarin::person_t * const person = samarin::findPerson(data, id);
+    const samarin::Person * const person = samarin::findPerson(data, id);
     if (person == nullptr) {
       printInvalid(out);
     } else if (person->named) {
@@ -151,10 +151,10 @@ namespace {
     }
   }
 
-  void doRedesc(std::ostream & out, samarin::dataset_t & data, std::size_t id,
+  void doRedesc(std::ostream & out, samarin::Dataset & data, std::size_t id,
       const std::string & description)
   {
-    samarin::person_t * const person = samarin::findPerson(data, id);
+    samarin::Person * const person = samarin::findPerson(data, id);
     if (person == nullptr) {
       printInvalid(out);
       return;
@@ -163,7 +163,7 @@ namespace {
     person->named = true;
   }
 
-  void doMeets(std::ostream & out, samarin::dataset_t & data, std::size_t id)
+  void doMeets(std::ostream & out, samarin::Dataset & data, std::size_t id)
   {
     if (samarin::findPerson(data, id) == nullptr) {
       printInvalid(out);
@@ -172,7 +172,7 @@ namespace {
     printMeetings(out, data, id, Bound::none, 0);
   }
 
-  void executeLine(std::ostream & out, samarin::dataset_t & data, const std::string & line)
+  void executeLine(std::ostream & out, samarin::Dataset & data, const std::string & line)
   {
     std::size_t position = 0;
     const std::string command = nextWord(line, position);
@@ -209,7 +209,7 @@ namespace {
   }
 }
 
-void samarin::runCommands(std::istream & input, std::ostream & output, dataset_t & data)
+void samarin::runCommands(std::istream & input, std::ostream & output, Dataset & data)
 {
   std::string line;
   while (std::getline(input, line)) {
