@@ -1,10 +1,13 @@
 #include <iostream>
 
-#include "person.hpp"
+#include "arguments.hpp"
 
-int main()
+int main(int argc, char ** argv)
 {
-  samarin::Person person{ 0, "" };
-  static_cast< void >(person);
+  samarin::options_t options{ false, "", false, "" };
+  if (!samarin::parseArguments(argc, argv, options)) {
+    std::cerr << "invalid arguments\n";
+    return 1;
+  }
   return 0;
 }
