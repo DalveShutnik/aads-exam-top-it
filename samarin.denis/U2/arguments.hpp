@@ -4,13 +4,13 @@
 #include <string>
 
 namespace samarin {
-  struct options_t {
+  struct Options {
     bool hasPersons;
     std::string personsName;
     std::string dataName;
   };
 
-  bool parseArguments(int argc, const char * const * argv, options_t & options);
+  bool parseArguments(int argc, const char * const * argv, Options & options);
 }
 
 #endif

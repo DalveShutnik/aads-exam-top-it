@@ -2,14 +2,9 @@
 
 #include <string>
 
-namespace {
-  bool hasPrefix(const std::string & text, const std::string & prefix)
-  {
-    return text.size() >= prefix.size() && text.compare(0, prefix.size(), prefix) == 0;
-  }
-}
+#include "cli.hpp"
 
-bool samarin::parseArguments(int argc, const char * const * argv, options_t & options)
+bool samarin::parseArguments(int argc, const char * const * argv, Options & options)
 {
   const std::string personsPrefix = "in:";
   const std::string dataPrefix = "data:";
@@ -22,20 +17,15 @@ bool samarin::parseArguments(int argc, const char * const * argv, options_t & op
   bool hasData = false;
   for (int i = 1; i < argc; ++i) {
     const std::string argument = argv[i];
-    if (hasPrefix(argument, personsPrefix)) {
-      const std::string name = argument.substr(personsPrefix.size());
-      if (options.hasPersons || name.empty()) {
+    std::string value;
+    if (detail::takeOption(argument, personsPrefix, value)) {
+      if (!detail::assignOnce(options.hasPersons, options.personsName, value)) {
         return false;
       }
-      options.hasPersons = true;
-      options.personsName = name;
-    } else if (hasPrefix(argument, dataPrefix)) {
-      const std::string name = argument.substr(dataPrefix.size());
-      if (hasData || name.empty()) {
+    } else if (detail::takeOption(argument, dataPrefix, value)) {
+      if (!detail::assignOnce(hasData, options.dataName, value)) {
         return false;
       }
-      hasData = true;
-      options.dataName = name;
     } else {
       return false;
     }

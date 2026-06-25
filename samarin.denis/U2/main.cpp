@@ -12,7 +12,7 @@ namespace {
   const int exitOpenError = 2;
   const int exitDataError = 3;
 
-  int run(const samarin::options_t & options, samarin::Dataset & data)
+  int run(const samarin::Options & options, samarin::Dataset & data)
   {
     if (options.hasPersons) {
       std::ifstream personsFile(options.personsName);
@@ -38,7 +38,7 @@ namespace {
 
 int main(int argc, char ** argv)
 {
-  samarin::options_t options{ false, "", "" };
+  samarin::Options options{ false, "", "" };
   if (!samarin::parseArguments(argc, argv, options)) {
     std::cerr << "invalid arguments\n";
     return exitInvalidArguments;
