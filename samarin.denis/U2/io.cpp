@@ -11,16 +11,9 @@
 namespace {
   using PersonNode = samarin::detail::list_node_t< samarin::Person >;
 
-  void skipSpaces(const std::string & text, std::size_t & position)
-  {
-    while (position < text.size() && samarin::detail::isSpaceChar(text[position])) {
-      ++position;
-    }
-  }
-
   bool readField(const std::string & line, std::size_t & position, std::size_t & value)
   {
-    skipSpaces(line, position);
+    samarin::detail::skipSpaces(line, position);
     const std::pair< bool, std::size_t > parsed = samarin::detail::readUnsigned(line, position);
     if (!parsed.first) {
       return false;
@@ -47,7 +40,7 @@ bool samarin::readMeetings(std::istream & input, Dataset & data)
   std::string line;
   while (std::getline(input, line)) {
     std::size_t position = 0;
-    skipSpaces(line, position);
+    samarin::detail::skipSpaces(line, position);
     if (position == line.size()) {
       continue;
     }
@@ -58,7 +51,7 @@ bool samarin::readMeetings(std::istream & input, Dataset & data)
         || !readField(line, position, duration)) {
       return false;
     }
-    skipSpaces(line, position);
+    samarin::detail::skipSpaces(line, position);
     if (position != line.size()) {
       return false;
     }
