@@ -51,6 +51,13 @@ namespace {
     return true;
   }
 
+  bool parseTwo(const std::string & line, std::size_t & position, std::size_t & first,
+      std::size_t & second)
+  {
+    return parseNumber(nextWord(line, position), first)
+        && parseNumber(nextWord(line, position), second);
+  }
+
   bool parseQuoted(const std::string & line, std::size_t & position, std::string & value)
   {
     while (position < line.size() && line[position] != '"') {
@@ -297,7 +304,7 @@ namespace {
     } else if (command == "less") {
       std::size_t threshold = 0;
       std::size_t id = 0;
-      if (parseNumber(nextWord(line, position), threshold) && parseNumber(nextWord(line, position), id)) {
+      if (parseTwo(line, position, threshold, id)) {
         doBounded(out, data, threshold, id, Bound::below);
       } else {
         printInvalid(out);
@@ -305,7 +312,7 @@ namespace {
     } else if (command == "greater") {
       std::size_t threshold = 0;
       std::size_t id = 0;
-      if (parseNumber(nextWord(line, position), threshold) && parseNumber(nextWord(line, position), id)) {
+      if (parseTwo(line, position, threshold, id)) {
         doBounded(out, data, threshold, id, Bound::above);
       } else {
         printInvalid(out);
@@ -313,7 +320,7 @@ namespace {
     } else if (command == "commons") {
       std::size_t first = 0;
       std::size_t second = 0;
-      if (parseNumber(nextWord(line, position), first) && parseNumber(nextWord(line, position), second)) {
+      if (parseTwo(line, position, first, second)) {
         doCommons(out, data, first, second);
       } else {
         printInvalid(out);
@@ -321,7 +328,7 @@ namespace {
     } else if (command == "deanon") {
       std::size_t anonId = 0;
       std::size_t namedId = 0;
-      if (parseNumber(nextWord(line, position), anonId) && parseNumber(nextWord(line, position), namedId)) {
+      if (parseTwo(line, position, anonId, namedId)) {
         doDeanon(out, data, anonId, namedId);
       } else {
         printInvalid(out);
