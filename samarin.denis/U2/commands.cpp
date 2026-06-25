@@ -1,12 +1,13 @@
 #include "commands.hpp"
 
-#include <cctype>
 #include <cstddef>
 #include <istream>
 #include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
+
+#include "parsing.hpp"
 
 namespace {
   using PersonNode = samarin::detail::list_node_t< samarin::Person >;
@@ -20,11 +21,6 @@ namespace {
     above
   };
 
-  bool isSpaceChar(char symbol)
-  {
-    return std::isspace(static_cast< unsigned char >(symbol)) != 0;
-  }
-
   void printInvalid(std::ostream & out)
   {
     out << "<INVALID COMMAND>\n";
@@ -32,11 +28,11 @@ namespace {
 
   std::string nextWord(const std::string & line, std::size_t & position)
   {
-    while (position < line.size() && isSpaceChar(line[position])) {
+    while (position < line.size() && samarin::detail::isSpaceChar(line[position])) {
       ++position;
     }
     const std::size_t start = position;
-    while (position < line.size() && !isSpaceChar(line[position])) {
+    while (position < line.size() && !samarin::detail::isSpaceChar(line[position])) {
       ++position;
     }
     return line.substr(start, position - start);
@@ -44,19 +40,12 @@ namespace {
 
   bool parseNumber(const std::string & token, std::size_t & value)
   {
-    if (token.empty()) {
+    std::size_t position = 0;
+    const std::pair< bool, std::size_t > parsed = samarin::detail::readUnsigned(token, position);
+    if (!parsed.first || position != token.size()) {
       return false;
     }
-    const std::size_t base = 10;
-    std::size_t result = 0;
-    for (std::size_t i = 0; i < token.size(); ++i) {
-      const char symbol = token[i];
-      if (std::isdigit(static_cast< unsigned char >(symbol)) == 0) {
-        return false;
-      }
-      result = result * base + static_cast< std::size_t >(symbol - '0');
-    }
-    value = result;
+    value = parsed.second;
     return true;
   }
 
