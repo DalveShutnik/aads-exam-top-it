@@ -8,6 +8,8 @@
 #include <utility>
 
 namespace {
+  using PersonNode = samarin::detail::list_node_t< samarin::Person >;
+
   bool isSpaceChar(char symbol)
   {
     return std::isspace(static_cast< unsigned char >(symbol)) != 0;
@@ -68,8 +70,7 @@ namespace {
 
   bool containsId(const samarin::detail::list_t< samarin::Person > & records, std::size_t id)
   {
-    using Node = const samarin::detail::list_node_t< samarin::Person >;
-    for (Node * node = records.head; node != nullptr; node = node->next) {
+    for (const PersonNode * node = records.head; node != nullptr; node = node->next) {
       if (node->value.id == id) {
         return true;
       }
@@ -96,8 +97,7 @@ samarin::counts_t samarin::readRecords(std::istream & input, detail::list_t< Per
 
 void samarin::writeRecords(std::ostream & output, const detail::list_t< Person > & records)
 {
-  using Node = const detail::list_node_t< Person >;
-  for (Node * node = records.head; node != nullptr; node = node->next) {
+  for (const PersonNode * node = records.head; node != nullptr; node = node->next) {
     output << node->value.id << ' ' << node->value.info << '\n';
   }
 }
