@@ -171,6 +171,32 @@ namespace {
     printMeetings(out, data, id, bound, threshold);
   }
 
+  bool metWith(const samarin::Dataset & data, std::size_t person, std::size_t partner)
+  {
+    for (const MeetingNode * node = data.meetings.head; node != nullptr; node = node->next) {
+      const samarin::Meeting & meeting = node->value;
+      if ((meeting.first == person && meeting.second == partner)
+          || (meeting.first == partner && meeting.second == person)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void doCommons(std::ostream & out, samarin::Dataset & data, std::size_t first, std::size_t second)
+  {
+    if (samarin::findPerson(data, first) == nullptr || samarin::findPerson(data, second) == nullptr) {
+      printInvalid(out);
+      return;
+    }
+    for (const PersonNode * node = data.persons.head; node != nullptr; node = node->next) {
+      const std::size_t candidate = node->value.id;
+      if (metWith(data, first, candidate) && metWith(data, second, candidate)) {
+        out << candidate << '\n';
+      }
+    }
+  }
+
   void executeLine(std::ostream & out, samarin::Dataset & data, const std::string & line)
   {
     std::size_t position = 0;
@@ -215,6 +241,14 @@ namespace {
       std::size_t id = 0;
       if (parseNumber(nextWord(line, position), threshold) && parseNumber(nextWord(line, position), id)) {
         doBounded(out, data, threshold, id, Bound::above);
+      } else {
+        printInvalid(out);
+      }
+    } else if (command == "commons") {
+      std::size_t first = 0;
+      std::size_t second = 0;
+      if (parseNumber(nextWord(line, position), first) && parseNumber(nextWord(line, position), second)) {
+        doCommons(out, data, first, second);
       } else {
         printInvalid(out);
       }
