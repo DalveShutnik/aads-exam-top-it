@@ -17,10 +17,10 @@ namespace {
     std::ofstream outputFile;
     if (options.hasOutput) {
       outputFile.open(options.outputName);
-    }
-    if (options.hasOutput && !outputFile.is_open()) {
-      std::cerr << "cannot open output file\n";
-      return exitRuntimeError;
+      if (!outputFile.is_open()) {
+        std::cerr << "cannot open output file\n";
+        return exitRuntimeError;
+      }
     }
     std::ostream & output = options.hasOutput ? outputFile : std::cout;
     samarin::writeRecords(output, records);
