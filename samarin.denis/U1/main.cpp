@@ -26,32 +26,28 @@ int main(int argc, char ** argv)
   std::istream & input = options.hasInput ? inputFile : std::cin;
 
   samarin::detail::list_t< samarin::Person > records{ nullptr, nullptr };
-  samarin::counts_t counts{ 0, 0 };
+  int code = 0;
   try {
-    counts = samarin::readRecords(input, records);
-  } catch (const std::exception & error) {
-    samarin::detail::clear(records);
-    std::cerr << error.what() << '\n';
-    return 2;
-  }
-  if (options.hasInput) {
-    inputFile.close();
-  }
-
-  std::ofstream outputFile;
-  if (options.hasOutput) {
-    outputFile.open(options.outputName);
-    if (!outputFile.is_open()) {
-      samarin::detail::clear(records);
-      std::cerr << "cannot open output file\n";
-      return 2;
+    const samarin::counts_t counts = samarin::readRecords(input, records);
+    if (options.hasInput) {
+      inputFile.close();
     }
+    std::ofstream outputFile;
+    if (options.hasOutput) {
+      outputFile.open(options.outputName);
+    }
+    if (options.hasOutput && !outputFile.is_open()) {
+      std::cerr << "cannot open output file\n";
+      code = 2;
+    } else {
+      std::ostream & output = options.hasOutput ? outputFile : std::cout;
+      samarin::writeRecords(output, records);
+      std::cerr << counts.accepted << ' ' << counts.ignored << '\n';
+    }
+  } catch (const std::exception & error) {
+    std::cerr << error.what() << '\n';
+    code = 2;
   }
-  std::ostream & output = options.hasOutput ? outputFile : std::cout;
-
-  samarin::writeRecords(output, records);
-  std::cerr << counts.accepted << ' ' << counts.ignored << '\n';
-
   samarin::detail::clear(records);
-  return 0;
+  return code;
 }
