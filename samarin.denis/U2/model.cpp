@@ -1,38 +1,32 @@
 #include "model.hpp"
 
-#include <memory>
 #include <string>
 
 namespace {
-  using PersonNode = samarin::detail::list_node_t< samarin::Person >;
+  bool comesBeforeById(const samarin::Person & left, const samarin::Person & right)
+  {
+    return left.id < right.id;
+  }
 }
 
 bool samarin::insertPerson(Dataset & data, std::size_t id, bool named,
     const std::string & description)
 {
-  PersonNode ** link = std::addressof(data.persons.head);
-  while (*link != nullptr && (*link)->value.id < id) {
-    link = std::addressof((*link)->next);
-  }
-  if (*link != nullptr && (*link)->value.id == id) {
+  if (findPerson(data, id) != nullptr) {
     return false;
   }
-  PersonNode * const node = new PersonNode{ Person{ id, named, description }, *link };
-  *link = node;
-  if (node->next == nullptr) {
-    data.persons.tail = node;
-  }
+  const Person person{ id, named, description };
+  detail::insertSorted(data.persons, person, comesBeforeById);
   return true;
 }
 
 samarin::Person * samarin::findPerson(Dataset & data, std::size_t id)
 {
-  for (PersonNode * node = data.persons.head; node != nullptr; node = node->next) {
-    if (node->value.id == id) {
-      return std::addressof(node->value);
-    }
-  }
-  return nullptr;
+  const auto hasId = [id](const Person & person)
+  {
+    return person.id == id;
+  };
+  return detail::findValue(data.persons, hasId);
 }
 
 void samarin::addMeeting(Dataset & data, std::size_t first, std::size_t second,
