@@ -1,5 +1,5 @@
-#ifndef SAMARIN_U1_LIST_HPP
-#define SAMARIN_U1_LIST_HPP
+#ifndef SAMARIN_COMMON_LIST_HPP
+#define SAMARIN_COMMON_LIST_HPP
 
 namespace samarin {
   namespace detail {
