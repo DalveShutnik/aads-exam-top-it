@@ -5,6 +5,7 @@
 #include <istream>
 #include <ostream>
 #include <string>
+#include <utility>
 
 namespace {
   bool isSpaceChar(char symbol)
@@ -30,12 +31,8 @@ namespace {
     return text.substr(begin, end - begin);
   }
 
-  bool parsePerson(const std::string & line, samarin::Person & person)
+  std::pair< bool, std::size_t > parseId(const std::string & line, std::size_t & position)
   {
-    std::size_t position = 0;
-    while (position < line.size() && isSpaceChar(line[position])) {
-      ++position;
-    }
     const std::size_t base = 10;
     std::size_t id = 0;
     bool hasDigit = false;
@@ -44,14 +41,24 @@ namespace {
       hasDigit = true;
       ++position;
     }
-    if (!hasDigit) {
+    return std::make_pair(hasDigit, id);
+  }
+
+  bool parsePerson(const std::string & line, samarin::Person & person)
+  {
+    std::size_t position = 0;
+    while (position < line.size() && isSpaceChar(line[position])) {
+      ++position;
+    }
+    const std::pair< bool, std::size_t > parsed = parseId(line, position);
+    if (!parsed.first) {
       return false;
     }
     const std::string info = trim(line.substr(position));
     if (info.empty()) {
       return false;
     }
-    person.id = id;
+    person.id = parsed.second;
     person.info = info;
     return true;
   }
