@@ -194,7 +194,9 @@ namespace {
 
   void doCommons(std::ostream & out, samarin::Dataset & data, std::size_t first, std::size_t second)
   {
-    if (samarin::findPerson(data, first) == nullptr || samarin::findPerson(data, second) == nullptr) {
+    const bool bothExist = samarin::findPerson(data, first) != nullptr
+        && samarin::findPerson(data, second) != nullptr;
+    if (!bothExist) {
       printInvalid(out);
       return;
     }
@@ -240,7 +242,8 @@ namespace {
     data.persons.tail = tail;
   }
 
-  void doDeanon(std::ostream & out, samarin::Dataset & data, std::size_t anonId, std::size_t namedId)
+  void doDeanon(std::ostream & out, samarin::Dataset & data, std::size_t anonId,
+      std::size_t namedId)
   {
     samarin::Person * const anon = samarin::findPerson(data, anonId);
     samarin::Person * const named = samarin::findPerson(data, namedId);

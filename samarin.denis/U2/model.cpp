@@ -3,18 +3,21 @@
 #include <memory>
 #include <string>
 
+namespace {
+  using PersonNode = samarin::detail::list_node_t< samarin::Person >;
+}
+
 bool samarin::insertPerson(Dataset & data, std::size_t id, bool named,
     const std::string & description)
 {
-  detail::list_node_t< Person > ** link = std::addressof(data.persons.head);
+  PersonNode ** link = std::addressof(data.persons.head);
   while (*link != nullptr && (*link)->value.id < id) {
     link = std::addressof((*link)->next);
   }
   if (*link != nullptr && (*link)->value.id == id) {
     return false;
   }
-  detail::list_node_t< Person > * const node =
-      new detail::list_node_t< Person >{ Person{ id, named, description }, *link };
+  PersonNode * const node = new PersonNode{ Person{ id, named, description }, *link };
   *link = node;
   if (node->next == nullptr) {
     data.persons.tail = node;
@@ -24,7 +27,7 @@ bool samarin::insertPerson(Dataset & data, std::size_t id, bool named,
 
 samarin::Person * samarin::findPerson(Dataset & data, std::size_t id)
 {
-  for (detail::list_node_t< Person > * node = data.persons.head; node != nullptr; node = node->next) {
+  for (PersonNode * node = data.persons.head; node != nullptr; node = node->next) {
     if (node->value.id == id) {
       return std::addressof(node->value);
     }
