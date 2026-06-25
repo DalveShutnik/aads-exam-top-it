@@ -1,18 +1,13 @@
-#ifndef SAMARIN_U2_MODEL_HPP
-#define SAMARIN_U2_MODEL_HPP
+#ifndef SAMARIN_COMMON_MODEL_HPP
+#define SAMARIN_COMMON_MODEL_HPP
 
 #include <cstddef>
 #include <string>
 
 #include "list.hpp"
+#include "person.hpp"
 
 namespace samarin {
-  struct Person {
-    std::size_t id;
-    bool named;
-    std::string description;
-  };
-
   struct Meeting {
     std::size_t first;
     std::size_t second;

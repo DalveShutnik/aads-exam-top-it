@@ -25,8 +25,8 @@ samarin::counts_t samarin::readRecords(std::istream & input, detail::list_t< Per
   counts_t counts{ 0, 0 };
   std::string line;
   while (std::getline(input, line)) {
-    Person person{ 0, "" };
-    if (!detail::parseRecord(line, person.id, person.info) || containsId(records, person.id)) {
+    Person person{ 0, true, "" };
+    if (!detail::parseRecord(line, person.id, person.description) || containsId(records, person.id)) {
       ++counts.ignored;
     } else {
       detail::pushBack(records, person);
@@ -39,6 +39,6 @@ samarin::counts_t samarin::readRecords(std::istream & input, detail::list_t< Per
 void samarin::writeRecords(std::ostream & output, const detail::list_t< Person > & records)
 {
   for (const PersonNode * node = records.head; node != nullptr; node = node->next) {
-    output << node->value.id << ' ' << node->value.info << '\n';
+    output << node->value.id << ' ' << node->value.description << '\n';
   }
 }
