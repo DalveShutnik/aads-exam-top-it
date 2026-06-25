@@ -2,6 +2,9 @@
 #include <iostream>
 
 #include "arguments.hpp"
+#include "list.hpp"
+#include "person.hpp"
+#include "records.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -20,7 +23,11 @@ int main(int argc, char ** argv)
     }
   }
   std::istream & input = options.hasInput ? inputFile : std::cin;
-  static_cast< void >(input);
 
+  samarin::detail::list_t< samarin::Person > records{ nullptr, nullptr };
+  const samarin::counts_t counts = samarin::readRecords(input, records);
+  static_cast< void >(counts);
+
+  samarin::detail::clear(records);
   return 0;
 }
