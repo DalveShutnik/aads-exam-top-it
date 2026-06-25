@@ -23,6 +23,11 @@ namespace samarin {
     detail::list_t< person_t > persons;
     detail::list_t< meeting_t > meetings;
   };
+
+  bool insertPerson(dataset_t & data, std::size_t id, bool named, const std::string & description);
+  person_t * findPerson(dataset_t & data, std::size_t id);
+  void addMeeting(dataset_t & data, std::size_t first, std::size_t second, std::size_t duration);
+  void clearDataset(dataset_t & data);
 }
 
 #endif

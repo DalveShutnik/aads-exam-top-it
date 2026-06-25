@@ -3,7 +3,6 @@
 int main()
 {
   samarin::dataset_t data{ { nullptr, nullptr }, { nullptr, nullptr } };
-  samarin::detail::clear(data.persons);
-  samarin::detail::clear(data.meetings);
+  samarin::clearDataset(data);
   return 0;
 }
